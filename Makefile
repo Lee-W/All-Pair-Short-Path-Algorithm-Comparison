@@ -5,6 +5,32 @@ BIN_DIR := bin
 BUILD_DIR := build
 SRC_DIR := src
 
+$(BIN_DIR)/SPSPComparison.out: $(SRC_DIR)/APSPComparison.cpp \
+							   $(BUILD_DIR)/APSPAlgorithms.o \
+							   $(BUILD_DIR)/SSSPAlgorithms.o $(BUILD_DIR)/MinHeap.o\
+							   $(BUILD_DIR)/SpFileReader.o
+	@mkdir -p $(BIN_DIR)
+	$(CC) -o $@ $< $(SRC_DIR)/APSPAlgorithms.cpp\
+				   $(SRC_DIR)/SSSPAlgorithms.cpp\
+				   $(SRC_DIR)/MinHeap.cpp\
+				   $(SRC_DIR)/SpFileReader.cpp\
+				   $(CFLAG)
+
+$(BUILD_DIR)/APSPAlgorithms.o: $(SRC_DIR)/APSPComparison.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CC) -c -o $@ $< $(CFLAG)
+
+$(BUILD_DIR)/SSSPAlgorithms.o: $(SRC_DIR)/SSSPAlgorithms.cpp $(BUILD_DIR)/MinHeap.o
+	@mkdir -p $(BUILD_DIR)
+	$(CC) -c -o $@ $< $(CFLAG)
+
+$(BUILD_DIR)/MinHeap.o: $(SRC_DIR)/MinHeap.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CC) -c -o $@ $< $(CFLAG)
+
+$(BUILD_DIR)/SpFileReader.o: $(SRC_DIR)/SpFileReader.cpp $(SRC_DIR)/SpFileReader.h
+	@mkdir -p $(BUILD_DIR)
+	$(CC) -c -o $@ $< $(CFLAG)
 
 gen: input/spflower.out
 	@echo "Start generating test case"
@@ -14,10 +40,6 @@ gen: input/spflower.out
 input/spflower.out:
 	gcc-4.8 -o $@ input/spflower.c
 
-$(BUILD_DIR)/SpFileReader.o: $(SRC_DIR)/SpFileReader.cpp $(SRC_DIR)/SpFileReader.h
-	@mkdir -p $(BUILD_DIR)
-	$(CC) -c -o $@ $< $(CFLAG)
-
 .PHONY: clean
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR) input/spflower.out input/test*
+	rm -rf $(BUILD_DIR) $(BIN_DIR) input/spflower.out input/test_case/
