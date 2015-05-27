@@ -14,10 +14,16 @@ public:
     void AlgebraicalFloydWarshall();
     void GraphicalFloydWarshall();
 
+    clock_t getProcessTime();
+    int getRelaxNum();
+
 private:
     vector<vector<int> > dis;
     vector<vector<int> > pre;
     int nodeNum;
+
+    clock_t processTime;
+    int relaxNum;
 };
 
 #endif

@@ -14,6 +14,9 @@ void SSSPAlgorithms::initial(int n, vector<Arc> arcs)
 
 void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
 {
+    clock_t startTime = clock();
+    relaxNum = 0;
+
     MinHeap h;
     dis[source] = 0;
     pre[source] = source;
@@ -28,8 +31,9 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
 
         // Relaxation
         for (auto i : network[heapTop.index]) {
-            tempDis = dis[heapTop.index] + i.arcLength;
+            relaxNum++;
 
+            tempDis = dis[heapTop.index] + i.arcLength;
             if (tempDis < dis[i.to]) {
                 if (dis[i.to] == INF)
                     h.push(Node(i.to, dis[i.to]));
@@ -42,10 +46,14 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
             }
         }
     }
+    processTime = clock() - startTime;
 }
 
 void SSSPAlgorithms::Dial(int source)
 {
+    clock_t startTime = clock();
+    relaxNum = 0;
+
     vector<vector<int> > indexBucket;
     int maxBucketSize = countMaxBucketSize();
     indexBucket.resize(maxBucketSize);
@@ -73,6 +81,8 @@ void SSSPAlgorithms::Dial(int source)
 
         // Relaxation
         for (auto i : network[curNodeIndex]) {
+            relaxNum++;
+
             tempDis = dis[curNodeIndex] + i.arcLength;
             if (tempDis < dis[i.to]) {
                 // In case that bucket is not large enough
@@ -91,6 +101,7 @@ void SSSPAlgorithms::Dial(int source)
             }
         }
     }
+    processTime = clock() - startTime;
 }
 
 // Count the sum of the first ecountered numbers since bucket size would never
@@ -117,11 +128,20 @@ void SSSPAlgorithms::vectorDelete(vector<int>& v, int value)
 }
 
 // Bellman Ford with Dequeue
-void SSSPAlgorithms::PAPE(int source) {}
+void SSSPAlgorithms::PAPE(int source)
+{
+    clock_t startTime = clock();
+    relaxNum = 0;
+
+    processTime = clock() - startTime;
+}
 
 // Bellman Ford with Queue
 void SSSPAlgorithms::SPFA(int source)
 {
+    clock_t startTime = clock();
+    relaxNum = 0;
+
     queue<int> q;
     vector<bool> inqueue(nodeNum + 1, false);
 
@@ -138,6 +158,7 @@ void SSSPAlgorithms::SPFA(int source)
             int des = arc.to;
             int len = arc.arcLength;
 
+            relaxNum++;
             if (dis[cur] + len < dis[des]) {
                 dis[des] = dis[cur] + len;
                 pre[des] = cur;
@@ -146,6 +167,7 @@ void SSSPAlgorithms::SPFA(int source)
             }
         }
     }
+    processTime = clock() - startTime;
 }
 
 vector<int> SSSPAlgorithms::getDis()
@@ -156,4 +178,14 @@ vector<int> SSSPAlgorithms::getDis()
 vector<int> SSSPAlgorithms::getPre()
 {
     return pre;
+}
+
+clock_t SSSPAlgorithms::getProcessTime()
+{
+    return processTime;
+}
+
+int SSSPAlgorithms::getRelaxNum()
+{
+    return relaxNum;
 }

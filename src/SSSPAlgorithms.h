@@ -25,12 +25,17 @@ public:
 
     vector<int> getDis();
     vector<int> getPre();
+    clock_t getProcessTime();
+    int getRelaxNum();
 
 private:
     vector<vector<Arc> > network;
     vector<int> dis;
     vector<int> pre;
     int nodeNum;
+
+    clock_t processTime;
+    int relaxNum;
 
     void vectorDelete(vector<int>& v, int value);
     int countMaxBucketSize();

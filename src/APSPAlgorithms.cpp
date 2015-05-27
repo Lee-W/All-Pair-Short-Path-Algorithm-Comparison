@@ -29,13 +29,36 @@ void APSPAlgorithms::initial(int n, vector<Arc> arcs)
 
 void APSPAlgorithms::AlgebraicalFloydWarshall()
 {
+    clock_t startTime = clock();
+    relaxNum = 0;
+
     for (int mid = 1; mid < nodeNum + 1; mid++)
         for (int start = 0; start < nodeNum + 1; start++)
-            for (int end = 0; end < nodeNum + 1; end++)
+            for (int end = 0; end < nodeNum + 1; end++) {
+                relaxNum++;
                 if (dis[start][end] > dis[start][mid] + dis[mid][end]) {
                     dis[start][end] = dis[start][mid] + dis[mid][end];
                     pre[start][end] = pre[mid][end];
                 }
+            }
+
+    processTime = clock() -startTime;
 }
 
-void APSPAlgorithms::GraphicalFloydWarshall() {}
+void APSPAlgorithms::GraphicalFloydWarshall()
+{
+    clock_t startTime = clock();
+    relaxNum = 0;
+
+    processTime = clock() -startTime;
+}
+
+clock_t APSPAlgorithms::getProcessTime()
+{
+    return processTime;
+}
+
+int APSPAlgorithms::getRelaxNum()
+{
+    return relaxNum;
+}
