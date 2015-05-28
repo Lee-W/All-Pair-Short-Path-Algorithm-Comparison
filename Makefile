@@ -42,4 +42,7 @@ input/spflower.out:
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR) input/spflower.out input/test_case/
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
+
+clean_test_case:
+	rm -rf input/spflower.out input/test_case/
