@@ -12,7 +12,7 @@ using namespace std;
 
 class SSSPAlgorithms {
 public:
-    void initial(int n, vector<Arc> arcs);
+    void initial(int n, vector<Arc> inputArcs);
 
     void DijkstraWithBinaryHeap(int source);
     void Dial(int source);

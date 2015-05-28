@@ -21,6 +21,7 @@ private:
     vector<vector<int> > dis;
     vector<vector<int> > pre;
     int nodeNum;
+    vector<Arc> arcs;
 
     clock_t processTime;
     int relaxNum;

@@ -8,8 +8,10 @@ clock_t APSPAlgorithms::countTime(void (*func)())
     return endTime - startTime;
 }
 
-void APSPAlgorithms::initial(int n, vector<Arc> arcs)
+void APSPAlgorithms::initial(int n, vector<Arc> inputArcs)
 {
+    arcs = inputArcs;
+
     nodeNum = n;
     dis.resize(nodeNum + 1);
     for (auto& row : dis)
@@ -49,6 +51,29 @@ void APSPAlgorithms::GraphicalFloydWarshall()
 {
     clock_t startTime = clock();
     relaxNum = 0;
+
+    // GraphicalFloydWarshall initialization
+    vector<vector<Arc> > fromList, toList;
+    fromList.resize(nodeNum + 1);
+    toList.resize(nodeNum + 1);
+    for (auto arc: arcs) {
+        fromList[arc.from].push_back(arc);
+        toList[arc.to].push_back(arc);
+    }
+
+    for (int mid = 1; mid < nodeNum + 1; mid++)
+    {
+        for (auto startArc: toList[mid])
+            for (auto endArc: fromList[mid]) {
+                relaxNum++;
+
+                int temp = startArc.arcLength + endArc.arcLength;
+                if (dis[startArc.from][endArc.to] > temp) {
+                    dis[startArc.from][endArc.to] = temp;
+                    pre[startArc.from][endArc.to] = mid;
+                }
+            }
+    }
 
     processTime = clock() -startTime;
 }
