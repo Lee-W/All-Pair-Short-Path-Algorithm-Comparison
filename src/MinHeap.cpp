@@ -7,7 +7,7 @@ MinHeap::MinHeap(int size) { container.reserve(size); }
 void MinHeap::push(Node node)
 {
     container.push_back(node);
-    decreaseValue(container.size() - 1, node);
+    minHeapify(container.size() - 1);
 }
 
 void MinHeap::decreaseValue(int index, Node node)
@@ -69,7 +69,3 @@ int MinHeap::search(Node node)
         }
     return index;
 }
-
-
-
-
