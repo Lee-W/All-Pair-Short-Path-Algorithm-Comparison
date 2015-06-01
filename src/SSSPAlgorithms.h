@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
+#include <deque>
 #include <queue>
 #include <algorithm>
 #include "Arc.h"
@@ -37,6 +39,7 @@ private:
     clock_t processTime;
     int relaxNum;
 
+    void reset();
     void vectorDelete(vector<int>& v, int value);
     int countMaxBucketSize();
 };

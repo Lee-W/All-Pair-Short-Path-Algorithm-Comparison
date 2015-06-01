@@ -3,17 +3,26 @@
 void SSSPAlgorithms::initial(int n, vector<Arc> arcs)
 {
     nodeNum = n;
-    dis.resize(nodeNum + 1, INF);
-    pre.resize(nodeNum + 1, -1);
+    reset();
 
     network.resize(nodeNum + 1);
-
     for (auto arc : arcs)
         network[arc.from].push_back(arc);
+        // network[arc.from][arc.to] = arc;
+}
+
+void SSSPAlgorithms::reset()
+{
+    dis.clear();
+    dis.resize(nodeNum + 1, INF);
+    pre.clear();
+    pre.resize(nodeNum + 1, -1);
 }
 
 void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
 {
+    reset();
+
     clock_t startTime = clock();
     relaxNum = 0;
 
@@ -21,6 +30,7 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
     dis[source] = 0;
     pre[source] = source;
     h.push(Node(source, dis[source]));
+    cout << "push " << source << " dis " << dis[source]<< endl;
 
     Node heapTop;
     int tempDis;
@@ -28,6 +38,7 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
     while (!h.isEmpty()) {
         heapTop = h.findMin();
         h.pop();
+        cout << "pop " << heapTop.index << " dis " << dis[heapTop.index] << endl;
 
         // Relaxation
         for (auto i : network[heapTop.index]) {
@@ -44,13 +55,17 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
                 dis[i.to] = tempDis;
                 pre[i.to] = heapTop.index;
             }
+            cout << "push " << i.to << " dis " << dis[i.to]<< endl;
         }
     }
+
     processTime = clock() - startTime;
 }
 
 void SSSPAlgorithms::Dial(int source)
 {
+    reset();
+
     clock_t startTime = clock();
     relaxNum = 0;
 
@@ -82,6 +97,7 @@ void SSSPAlgorithms::Dial(int source)
         // Relaxation
         for (auto i : network[curNodeIndex]) {
             relaxNum++;
+
 
             tempDis = dis[curNodeIndex] + i.arcLength;
             if (tempDis < dis[i.to]) {
@@ -130,8 +146,43 @@ void SSSPAlgorithms::vectorDelete(vector<int>& v, int value)
 // Bellman Ford with Dequeue
 void SSSPAlgorithms::PAPE(int source)
 {
+    reset();
     clock_t startTime = clock();
     relaxNum = 0;
+
+    deque<int> dq;
+    vector<bool> inqueue(nodeNum + 1, false);
+    vector<bool> isUpdated(nodeNum + 1, false);
+
+    dis[source] = 0;
+    inqueue[source] = true;
+    isUpdated[source] = true;
+    dq.push_front(source);
+
+    while (!dq.empty()) {
+        int cur = dq.front();
+        inqueue[cur] = false;
+        dq.pop_front();
+
+        for (auto arc : network[cur]) {
+            int des = arc.to;
+            int len = arc.arcLength;
+
+            relaxNum++;
+            if (dis[cur] + len < dis[des]) {
+                dis[des] = dis[cur] + len;
+                pre[des] = cur;
+
+                if (isUpdated[des]) {
+                    dq.push_front(des);
+                } else {
+                    dq.push_back(des);
+                    isUpdated[des] = true;
+                }
+                inqueue[des];
+            }
+        }
+    }
 
     processTime = clock() - startTime;
 }
@@ -139,6 +190,8 @@ void SSSPAlgorithms::PAPE(int source)
 // Bellman Ford with Queue
 void SSSPAlgorithms::SPFA(int source)
 {
+    reset();
+
     clock_t startTime = clock();
     relaxNum = 0;
 
@@ -163,10 +216,11 @@ void SSSPAlgorithms::SPFA(int source)
                 dis[des] = dis[cur] + len;
                 pre[des] = cur;
                 q.push(des);
-                inqueue[des];
+                inqueue[des] = true;
             }
         }
     }
+
     processTime = clock() - startTime;
 }
 
