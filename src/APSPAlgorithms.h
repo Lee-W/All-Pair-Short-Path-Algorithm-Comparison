@@ -14,6 +14,8 @@ public:
     void AlgebraicalFloydWarshall();
     void GraphicalFloydWarshall();
 
+    vector<vector<int> > getDis();
+    vector<vector<int> > getPre();
     clock_t getProcessTime();
     int getRelaxNum();
 

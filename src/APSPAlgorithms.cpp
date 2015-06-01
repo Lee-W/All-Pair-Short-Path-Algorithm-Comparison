@@ -35,8 +35,8 @@ void APSPAlgorithms::AlgebraicalFloydWarshall()
     relaxNum = 0;
 
     for (int mid = 1; mid < nodeNum + 1; mid++)
-        for (int start = 0; start < nodeNum + 1; start++)
-            for (int end = 0; end < nodeNum + 1; end++) {
+        for (int start = 1; start < nodeNum + 1; start++)
+            for (int end = 1 ; end < nodeNum + 1; end++) {
                 relaxNum++;
                 if (dis[start][end] > dis[start][mid] + dis[mid][end]) {
                     dis[start][end] = dis[start][mid] + dis[mid][end];
@@ -69,6 +69,11 @@ void APSPAlgorithms::GraphicalFloydWarshall()
 
                 int temp = startArc.arcLength + endArc.arcLength;
                 if (dis[startArc.from][endArc.to] > temp) {
+                    if (dis[startArc.from][endArc.to] == INF) {
+                        fromList[startArc.from].push_back(Arc(startArc.from, endArc.to, temp));
+                        toList[endArc.to].push_back(Arc(startArc.from, endArc.to, temp));
+                    }
+
                     dis[startArc.from][endArc.to] = temp;
                     pre[startArc.from][endArc.to] = mid;
                 }
@@ -76,6 +81,16 @@ void APSPAlgorithms::GraphicalFloydWarshall()
     }
 
     processTime = clock() -startTime;
+}
+
+vector<vector<int> > APSPAlgorithms::getDis()
+{
+    return dis;
+}
+
+vector<vector<int> > APSPAlgorithms::getPre()
+{
+    return pre;
 }
 
 clock_t APSPAlgorithms::getProcessTime()
