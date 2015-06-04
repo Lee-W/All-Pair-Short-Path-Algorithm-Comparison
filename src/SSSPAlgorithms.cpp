@@ -49,21 +49,19 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
     vector<bool> visited;
     visited.resize(nodeNum+1, false);
 
-    MinHeap h;
+    priority_queue<Node, vector<Node>, NodeComparator> pq;
     dis[source] = 0;
     pre[source] = source;
-    h.push(Node(source, dis[source]));
-    // cout << "push " << source << " dis " << dis[source]<< endl;
+    pq.push(Node(source, dis[source]));
 
     Node heapTop;
     int tempDis;
     int index;
-    while (!h.isEmpty()) {
-        heapTop = h.findMin();
-        h.pop();
+    while (!pq.empty()) {
+        heapTop = pq.top();
+        pq.pop();
         if (!visited[heapTop.index]) {
             visited[heapTop.index] = true;
-            cout << "pop " << heapTop.index << " dis " << dis[heapTop.index] << endl;
 
             // Relaxation
             for (auto i : network[heapTop.index]) {
@@ -71,18 +69,10 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
                     relaxNum++;
                     tempDis = dis[heapTop.index] + i.arcLength;
                     if (tempDis < dis[i.to]) {
-                        if (dis[i.to] == INF) {
-                            h.push(Node(i.to, tempDis));
-                            cout << "push " << i.to << " dis " << tempDis<< endl;
-                        }
-                        else {
-                            index = h.search(Node(i.to, dis[i.to]));
-                            h.decreaseValue(index, Node(i.to, tempDis));
-                            cout << "push " << i.to << " dis " << tempDis<< endl;
-                        }
                         dis[i.to] = tempDis;
                         pre[i.to] = heapTop.index;
                     }
+                    pq.push(Node(i.to, tempDis));
                 }
             }
         }

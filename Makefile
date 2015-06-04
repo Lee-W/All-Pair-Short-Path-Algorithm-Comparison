@@ -7,24 +7,23 @@ SRC_DIR := src
 
 $(BIN_DIR)/SPSPComparison.out: $(SRC_DIR)/APSPComparison.cpp \
 							   $(BUILD_DIR)/APSPAlgorithms.o \
-							   $(BUILD_DIR)/SSSPAlgorithms.o $(BUILD_DIR)/MinHeap.o\
+							   $(BUILD_DIR)/SSSPAlgorithms.o $(BUILD_DIR)/NodeComparator.o \
 							   $(BUILD_DIR)/SpFileReader.o
 	@mkdir -p $(BIN_DIR)
 	$(CC) -o $@ $< $(SRC_DIR)/APSPAlgorithms.cpp\
 				   $(SRC_DIR)/SSSPAlgorithms.cpp\
-				   $(SRC_DIR)/MinHeap.cpp\
-				   $(SRC_DIR)/SpFileReader.cpp\
+				   $(SRC_DIR)/SpFileReader.cpp $(SRC_DIR)/NodeComparator.cpp\
 				   $(CFLAG)
 
 $(BUILD_DIR)/APSPAlgorithms.o: $(SRC_DIR)/APSPComparison.cpp
 	@mkdir -p $(BUILD_DIR)
 	$(CC) -c -o $@ $< $(CFLAG)
 
-$(BUILD_DIR)/SSSPAlgorithms.o: $(SRC_DIR)/SSSPAlgorithms.cpp $(BUILD_DIR)/MinHeap.o
+$(BUILD_DIR)/SSSPAlgorithms.o: $(SRC_DIR)/SSSPAlgorithms.cpp
 	@mkdir -p $(BUILD_DIR)
 	$(CC) -c -o $@ $< $(CFLAG)
 
-$(BUILD_DIR)/MinHeap.o: $(SRC_DIR)/MinHeap.cpp
+$(BUILD_DIR)/NodeComparator.o: $(SRC_DIR)/NodeComparator.cpp
 	@mkdir -p $(BUILD_DIR)
 	$(CC) -c -o $@ $< $(CFLAG)
 

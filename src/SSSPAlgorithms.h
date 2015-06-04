@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "Arc.h"
 #include "Node.h"
-#include "MinHeap.h"
+#include "NodeComparator.h"
 using namespace std;
 
 class SSSPAlgorithms {
