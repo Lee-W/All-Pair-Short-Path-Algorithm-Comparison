@@ -46,11 +46,14 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
     clock_t startTime = clock();
     relaxNum = 0;
 
+    vector<bool> visited;
+    visited.resize(nodeNum+1, false);
+
     MinHeap h;
     dis[source] = 0;
     pre[source] = source;
     h.push(Node(source, dis[source]));
-    cout << "push " << source << " dis " << dis[source]<< endl;
+    // cout << "push " << source << " dis " << dis[source]<< endl;
 
     Node heapTop;
     int tempDis;
@@ -58,27 +61,32 @@ void SSSPAlgorithms::DijkstraWithBinaryHeap(int source)
     while (!h.isEmpty()) {
         heapTop = h.findMin();
         h.pop();
-        cout << "pop " << heapTop.index << " dis " << dis[heapTop.index] << endl;
+        if (!visited[heapTop.index]) {
+            visited[heapTop.index] = true;
+            cout << "pop " << heapTop.index << " dis " << dis[heapTop.index] << endl;
 
-        // Relaxation
-        for (auto i : network[heapTop.index]) {
-            relaxNum++;
-
-            tempDis = dis[heapTop.index] + i.arcLength;
-            if (tempDis < dis[i.to]) {
-                if (dis[i.to] == INF)
-                    h.push(Node(i.to, dis[i.to]));
-                else {
-                    index = h.search(Node(i.to, dis[i.to]));
-                    h.decreaseValue(index, Node(i.to, tempDis));
+            // Relaxation
+            for (auto i : network[heapTop.index]) {
+                if (!visited[i.to]) {
+                    relaxNum++;
+                    tempDis = dis[heapTop.index] + i.arcLength;
+                    if (tempDis < dis[i.to]) {
+                        if (dis[i.to] == INF) {
+                            h.push(Node(i.to, tempDis));
+                            cout << "push " << i.to << " dis " << tempDis<< endl;
+                        }
+                        else {
+                            index = h.search(Node(i.to, dis[i.to]));
+                            h.decreaseValue(index, Node(i.to, tempDis));
+                            cout << "push " << i.to << " dis " << tempDis<< endl;
+                        }
+                        dis[i.to] = tempDis;
+                        pre[i.to] = heapTop.index;
+                    }
                 }
-                dis[i.to] = tempDis;
-                pre[i.to] = heapTop.index;
             }
-            cout << "push " << i.to << " dis " << dis[i.to]<< endl;
         }
     }
-
     processTime = clock() - startTime;
 }
 
