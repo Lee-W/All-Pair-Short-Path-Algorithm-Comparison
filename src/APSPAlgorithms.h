@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include <algorithm>
 #include "Arc.h"
 using namespace std;
 
@@ -27,6 +28,8 @@ private:
 
     clock_t processTime;
     int relaxNum;
+
+    static bool arcCmp(Arc a1, Arc a2);
 };
 
 #endif

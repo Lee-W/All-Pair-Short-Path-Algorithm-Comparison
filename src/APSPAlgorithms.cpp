@@ -1,5 +1,15 @@
 #include "APSPAlgorithms.h"
 
+bool APSPAlgorithms::arcCmp(Arc a1, Arc a2)
+{
+    if (a1.from == a2.from) {
+        if (a1.to < a2.to)
+            return a1.arcLength < a2.arcLength;
+        return a1.to < a2.to;
+    }
+    return a1.from < a2.from;
+}
+
 clock_t APSPAlgorithms::countTime(void (*func)())
 {
     clock_t startTime = clock();
@@ -23,9 +33,18 @@ void APSPAlgorithms::initial(int n, vector<Arc> inputArcs)
     for (auto& row : pre)
         row.resize(nodeNum + 1, -1);
 
+    sort(arcs.begin(), arcs.end(), arcCmp);
+    int preFrom = -1;
+    int preTo = -1;
     for (auto arc : arcs) {
-        dis[arc.from][arc.to] = arc.arcLength;
-        pre[arc.from][arc.to] = arc.from;
+        if (arc.from == preFrom && arc.to == preTo)
+            continue;
+        else {
+            dis[arc.from][arc.to] = arc.arcLength;
+            pre[arc.from][arc.to] = arc.from;
+            preFrom = arc.from;
+            preTo = arc.to;
+        }
     }
 }
 

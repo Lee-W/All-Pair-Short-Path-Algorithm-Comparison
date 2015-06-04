@@ -1,14 +1,34 @@
 #include "SSSPAlgorithms.h"
 
+bool SSSPAlgorithms::arcCmp(Arc a1, Arc a2)
+{
+    if (a1.from == a2.from) {
+        if (a1.to < a2.to)
+            return a1.arcLength < a2.arcLength;
+        return a1.to < a2.to;
+    }
+    return a1.from < a2.from;
+}
+
 void SSSPAlgorithms::initial(int n, vector<Arc> arcs)
 {
     nodeNum = n;
     reset();
 
     network.resize(nodeNum + 1);
-    for (auto arc : arcs)
-        network[arc.from].push_back(arc);
-        // network[arc.from][arc.to] = arc;
+
+    sort(arcs.begin(), arcs.end(), arcCmp);
+    int preFrom = -1;
+    int preTo = -1;
+    for (auto arc : arcs) {
+        if (arc.from == preFrom && arc.to == preTo)
+            continue;
+        else {
+            network[arc.from].push_back(arc);
+            preFrom = arc.from;
+            preTo = arc.to;
+        }
+    }
 }
 
 void SSSPAlgorithms::reset()

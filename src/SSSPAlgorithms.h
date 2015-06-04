@@ -42,6 +42,7 @@ private:
     void reset();
     void vectorDelete(vector<int>& v, int value);
     int countMaxBucketSize();
+    static bool arcCmp(Arc a1, Arc a2);
 };
 
 #endif
