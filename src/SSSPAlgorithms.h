@@ -6,6 +6,7 @@
 #include <map>
 #include <deque>
 #include <queue>
+#include <list>
 #include <algorithm>
 #include "Arc.h"
 #include "Node.h"

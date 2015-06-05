@@ -87,54 +87,49 @@ void SSSPAlgorithms::Dial(int source)
     clock_t startTime = clock();
     relaxNum = 0;
 
-    vector<vector<int> > indexBucket;
+    vector<bool> visited;
+    visited.resize(nodeNum+1, false);
+
+    vector<list<int> > indexBucket;
     int maxBucketSize = countMaxBucketSize();
-    indexBucket.resize(maxBucketSize);
+    indexBucket.resize(maxBucketSize+1);
 
     dis[source] = 0;
     pre[source] = source;
-    indexBucket.resize(dis[source] + 1);
     indexBucket[dis[source]].push_back(source);
 
     int curMin = 0;
     int curNodeIndex;
     int tempDis;
-    bool changeOccur = true;
-    while (changeOccur) {
-        changeOccur = false;
+    while (curMin < maxBucketSize+1) {
+        if (!indexBucket[curMin].empty()) {
+            curNodeIndex = indexBucket[curMin].back();
+            indexBucket[curMin].pop_back();
 
-        // Find next node to relax
-        for (int i = curMin; i < indexBucket.size(); i++)
-            if (!indexBucket[i].empty()) {
-                curNodeIndex = indexBucket[i].back();
-                indexBucket[i].pop_back();
-                curMin = i;
-                break;
+            if (!visited[curNodeIndex]) {
+                visited[curNodeIndex] = true;
+
+                for (auto i : network[curNodeIndex]) {
+                    relaxNum++;
+
+                    tempDis = dis[curNodeIndex] + i.arcLength;
+                    if (tempDis < dis[i.to]) {
+                        // In case that bucket is not large enough
+                        if (tempDis > indexBucket.size())
+                            indexBucket.resize(tempDis + 1);
+
+                        indexBucket[tempDis].push_back(i.to);
+
+                        dis[i.to] = tempDis;
+                        pre[i.to] = curNodeIndex;
+                    }
+                }
             }
-
-        // Relaxation
-        for (auto i : network[curNodeIndex]) {
-            relaxNum++;
-
-
-            tempDis = dis[curNodeIndex] + i.arcLength;
-            if (tempDis < dis[i.to]) {
-                // In case that bucket is not large enough
-                if (tempDis > indexBucket.size())
-                    indexBucket.resize(tempDis + 1);
-
-                // Update value in bucket
-                if (dis[i.to] != INF)
-                    vectorDelete(indexBucket[dis[i.to]], i.to);
-
-                indexBucket[tempDis].push_back(i.to);
-
-                dis[i.to] = tempDis;
-                pre[i.to] = curNodeIndex;
-                changeOccur = true;
-            }
+        } else {
+            curMin++;
         }
     }
+
     processTime = clock() - startTime;
 }
 

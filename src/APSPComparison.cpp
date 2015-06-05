@@ -57,14 +57,14 @@ void checkCorectness(int nodeNum, vector<Arc> arcs)
                 // cout << "FWA SPFA Error " << fwaDis[i][j] << "\t" << SPFADis[j] << endl;
             // if (fwaDis[i][j] != PAPEDis[j])
                 // cout << "FWA PAPE Error" << endl;
-            if (fwaDis[i][j] != dijDis[j]) {
-                cout << i << "\t" << j;
-                cout << "FWA Dij Error " << fwaDis[i][j] << "\t" << dijDis[j] <<endl;
-            }
-            // if (fwaDis[i][j] != DialDis[j]) {
+            // if (fwaDis[i][j] != dijDis[j]) {
                 // cout << i << "\t" << j;
-                // cout << "FWA Dial Error " << fwaDis[i][j] << "\t" << DialDis[j] <<endl;
+                // cout << " FWA Dij Error " << fwaDis[i][j] << "\t" << dijDis[j] <<endl;
             // }
+            if (fwaDis[i][j] != DialDis[j]) {
+                cout << i << "\t" << j;
+                cout << " FWA Dial Error " << fwaDis[i][j] << "\t" << DialDis[j] <<endl;
+            }
             // if (fwaDis[i][j] != fwgDis[i][j])
                 // cout << "FWA FWG Error" << endl;
         }
