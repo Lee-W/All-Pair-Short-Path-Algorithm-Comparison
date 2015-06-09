@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include "Arc.h"
 using namespace std;
