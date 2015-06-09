@@ -4,9 +4,105 @@
 #include "SSSPAlgorithms.h"
 using namespace std;
 
+void printUsage();
+void readSPFile(string fileName);
+void runSPAlgorithms();
+void printSummary();
+void checkCorrectness(int nodeNum, vector<Arc> arcs);
+
+int nodeNum;
+vector<Arc> arcs;
+int dialTime, dijkstraTime, PAPETime, SPFATime, GFWTime, AFWTime;
+int dialRelaxNum, dijkstraRelaxNum, PAPERelaxNum, SPFARelaxNum, GFWRelaxNum, AFWRelaxNum;
+
+int main(int argc, const char *argv[])
+{
+
+    if (argc == 2) {
+        readSPFile(argv[1]);
+        runSPAlgorithms();
+        printSummary();
+
+        return 0;
+    } else {
+        printUsage();
+    }
+}
+
 void printUsage()
 {
-    cout << "Usage" << endl;
+    cout << "Usage:" << endl;
+    cout << "\t./bin/SPSPComparison.out \"input file\"" << endl;
+}
+
+void readSPFile(string fileName)
+{
+    SpFileReader fr;
+    fr.readFile(fileName);
+    nodeNum = fr.getNodeNum();
+    arcs = fr.getArcs();
+}
+
+void runSPAlgorithms()
+{
+    SSSPAlgorithms ss;
+    APSPAlgorithms ap;
+    ss.initial(nodeNum, arcs);
+    ap.initial(nodeNum, arcs);
+
+    for (int i = 1; i < nodeNum+1; i++) {
+        ss.Dial(i);
+        dialTime += ss.getProcessTime();
+        dialRelaxNum += ss.getRelaxNum();
+
+        ss.SPFA(i);
+        SPFATime += ss.getProcessTime();
+        SPFARelaxNum += ss.getRelaxNum();
+
+        ss.DijkstraWithBinaryHeap(i);
+        dijkstraTime += ss.getProcessTime();
+        dijkstraRelaxNum += ss.getRelaxNum();
+
+
+        ss.PAPE(i);
+        PAPETime += ss.getProcessTime();
+        PAPERelaxNum += ss.getRelaxNum();
+    }
+
+    ap.AlgebraicalFloydWarshall();
+    GFWTime = ap.getProcessTime();
+    GFWRelaxNum = ap.getRelaxNum();
+
+    ap.GraphicalFloydWarshall();
+    AFWTime = ap.getProcessTime();
+    AFWRelaxNum = ap.getRelaxNum();
+}
+
+void printSummary()
+{
+    cout << "\t\t"
+         << "Dial" << "\t"
+         << "dij" << "\t"
+         << "SPFA" << "\t"
+         << "PAPE" << "\t"
+         << "FWG" << "\t"
+         << "FWA" << endl;
+
+    cout << "Time: " << "\t\t"
+         << dialTime << "\t"
+         << dijkstraTime << "\t"
+         << SPFATime << "\t"
+         << PAPETime << "\t"
+         << GFWTime << "\t"
+         << AFWTime << endl;
+
+    cout << "Relax Num: " << "\t"
+         << dialRelaxNum << "\t"
+         << dijkstraRelaxNum << "\t"
+         << SPFARelaxNum << "\t"
+         << PAPERelaxNum << "\t"
+         << GFWRelaxNum << "\t"
+         << AFWRelaxNum << endl;
 }
 
 void checkCorectness(int nodeNum, vector<Arc> arcs)
@@ -58,80 +154,3 @@ void checkCorectness(int nodeNum, vector<Arc> arcs)
     exit(0);
 }
 
-int main(int argc, const char *argv[])
-{
-    int nodeNum;
-    vector<Arc> arcs;
-
-    if (argc == 2) {
-        SpFileReader fr;
-        fr.readFile(argv[1]);
-        nodeNum = fr.getNodeNum();
-        arcs = fr.getArcs();
-
-        // checkCorectness(nodeNum, arcs);
-
-        SSSPAlgorithms ss;
-        APSPAlgorithms ap;
-        ss.initial(nodeNum, arcs);
-        ap.initial(nodeNum, arcs);
-
-        int dialTime, dijkstraTime, PAPETime, SPFATime, GFWTime, AFWTime;
-        int dialRelaxNum, dijkstraRelaxNum, PAPERelaxNum, SPFARelaxNum, GFWRelaxNum, AFWRelaxNum;
-
-        for (int i = 1; i < nodeNum+1; i++) {
-            ss.Dial(i);
-            dialTime += ss.getProcessTime();
-            dialRelaxNum += ss.getRelaxNum();
-
-            ss.SPFA(i);
-            SPFATime += ss.getProcessTime();
-            SPFARelaxNum += ss.getRelaxNum();
-
-            ss.DijkstraWithBinaryHeap(i);
-            dijkstraTime += ss.getProcessTime();
-            dijkstraRelaxNum += ss.getRelaxNum();
-
-
-            ss.PAPE(i);
-            PAPETime += ss.getProcessTime();
-            PAPERelaxNum += ss.getRelaxNum();
-        }
-
-        ap.AlgebraicalFloydWarshall();
-        GFWTime = ap.getProcessTime();
-        GFWRelaxNum = ap.getRelaxNum();
-
-        ap.GraphicalFloydWarshall();
-        AFWTime = ap.getProcessTime();
-        AFWRelaxNum = ap.getRelaxNum();
-
-        cout << "\t\t"
-             << "Dial" << "\t"
-             << "dij" << "\t"
-             << "SPFA" << "\t"
-             << "PAPE" << "\t"
-             << "FWG" << "\t"
-             << "FWA" << endl;
-
-        cout << "Time: " << "\t\t"
-             << dialTime << "\t"
-             << dijkstraTime << "\t"
-             << SPFATime << "\t"
-             << PAPETime << "\t" 
-             << GFWTime << "\t"
-             << AFWTime << endl;
-
-        cout << "Relax Num: " << "\t"
-             << dialRelaxNum << "\t"
-             << dijkstraRelaxNum << "\t"
-             << SPFARelaxNum << "\t"
-             << PAPERelaxNum << "\t"
-             << GFWRelaxNum << "\t"
-             << AFWRelaxNum << endl;
-
-        return 0;
-    } else {
-        printUsage();
-    }
-}
