@@ -27,16 +27,6 @@ void checkCorectness(int nodeNum, vector<Arc> arcs)
     vector<vector<int> > fwgDis = apFWG.getDis();
     vector<vector<int> > fwaDis = apFWA.getDis();
     vector<int> SPFADis, DialDis, dijDis, PAPEDis;
-    // for (int i = 1; i < nodeNum+1; i++) {
-    //     for (int j = 1; j < nodeNum+1; j++)
-    //         cout << fwgDis[i][j] << "\t";
-    //     cout << endl;
-    // }
-    // for (int i = 1; i < nodeNum+1; i++) {
-        // for (int j = 1; j < nodeNum+1; j++)
-            // cout << fwaDis[i][j] << "\t";
-        // cout << endl;
-    // }
 
     for (int i = 1; i < nodeNum+1; i++) {
     // for (int i = 1; i < 2; i++) {
@@ -61,12 +51,12 @@ void checkCorectness(int nodeNum, vector<Arc> arcs)
                 // cout << i << "\t" << j;
                 // cout << " FWA Dij Error " << fwaDis[i][j] << "\t" << dijDis[j] <<endl;
             // }
-            if (fwaDis[i][j] != DialDis[j]) {
-                cout << i << "\t" << j;
-                cout << " FWA Dial Error " << fwaDis[i][j] << "\t" << DialDis[j] <<endl;
-            }
-            // if (fwaDis[i][j] != fwgDis[i][j])
-                // cout << "FWA FWG Error" << endl;
+            // if (fwaDis[i][j] != DialDis[j]) {
+                // cout << i << "\t" << j;
+                // cout << " FWA Dial Error " << fwaDis[i][j] << "\t" << DialDis[j] <<endl;
+            // }
+            if (fwaDis[i][j] != fwgDis[i][j])
+                cout << "FWA FWG Error" << endl;
         }
         // cout << endl;
     }
