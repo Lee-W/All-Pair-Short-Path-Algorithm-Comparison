@@ -11,7 +11,6 @@ using namespace std;
 
 class APSPAlgorithms {
 public:
-    clock_t countTime(void (*func)());
     void initial(int n, vector<Arc> arcs);
     void AlgebraicalFloydWarshall();
     void GraphicalFloydWarshall();

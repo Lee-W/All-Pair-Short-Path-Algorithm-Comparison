@@ -29,7 +29,6 @@ void checkCorectness(int nodeNum, vector<Arc> arcs)
     vector<int> SPFADis, DialDis, dijDis, PAPEDis;
 
     for (int i = 1; i < nodeNum+1; i++) {
-    // for (int i = 1; i < 2; i++) {
         ssSPFA.SPFA(i);
         SPFADis = ssSPFA.getDis();
 
@@ -43,18 +42,14 @@ void checkCorectness(int nodeNum, vector<Arc> arcs)
         PAPEDis = ssPAPE.getDis();
 
         for (int j = 1; j < nodeNum + 1; j++) {
-            // if (fwaDis[i][j] != SPFADis[j])
-                // cout << "FWA SPFA Error " << fwaDis[i][j] << "\t" << SPFADis[j] << endl;
-            // if (fwaDis[i][j] != PAPEDis[j])
-                // cout << "FWA PAPE Error" << endl;
-            // if (fwaDis[i][j] != dijDis[j]) {
-                // cout << i << "\t" << j;
-                // cout << " FWA Dij Error " << fwaDis[i][j] << "\t" << dijDis[j] <<endl;
-            // }
-            // if (fwaDis[i][j] != DialDis[j]) {
-                // cout << i << "\t" << j;
-                // cout << " FWA Dial Error " << fwaDis[i][j] << "\t" << DialDis[j] <<endl;
-            // }
+            if (fwaDis[i][j] != SPFADis[j])
+                cout << "FWA SPFA Error " << fwaDis[i][j] << "\t" << SPFADis[j] << endl;
+            if (fwaDis[i][j] != PAPEDis[j])
+                cout << "FWA PAPE Error" << endl;
+            if (fwaDis[i][j] != dijDis[j])
+                cout << " FWA Dij Error " << fwaDis[i][j] << "\t" << dijDis[j] <<endl;
+            if (fwaDis[i][j] != DialDis[j])
+                cout << " FWA Dial Error " << fwaDis[i][j] << "\t" << DialDis[j] <<endl;
             if (fwaDis[i][j] != fwgDis[i][j])
                 cout << "FWA FWG Error" << endl;
         }
@@ -74,7 +69,7 @@ int main(int argc, const char *argv[])
         nodeNum = fr.getNodeNum();
         arcs = fr.getArcs();
 
-        checkCorectness(nodeNum, arcs);
+        // checkCorectness(nodeNum, arcs);
 
         SSSPAlgorithms ss;
         APSPAlgorithms ap;
@@ -111,14 +106,24 @@ int main(int argc, const char *argv[])
         AFWTime = ap.getProcessTime();
         AFWRelaxNum = ap.getRelaxNum();
 
-        cout << dialTime << "\t"
+        cout << "\t\t"
+             << "Dial" << "\t"
+             << "dij" << "\t"
+             << "SPFA" << "\t"
+             << "PAPE" << "\t"
+             << "FWG" << "\t"
+             << "FWA" << endl;
+
+        cout << "Time: " << "\t\t"
+             << dialTime << "\t"
              << dijkstraTime << "\t"
              << SPFATime << "\t"
              << PAPETime << "\t" 
              << GFWTime << "\t"
              << AFWTime << endl;
 
-        cout << dialRelaxNum << "\t"
+        cout << "Relax Num: " << "\t"
+             << dialRelaxNum << "\t"
              << dijkstraRelaxNum << "\t"
              << SPFARelaxNum << "\t"
              << PAPERelaxNum << "\t"

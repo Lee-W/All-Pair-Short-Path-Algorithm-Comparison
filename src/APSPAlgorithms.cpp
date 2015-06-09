@@ -10,14 +10,6 @@ bool APSPAlgorithms::arcCmp(Arc a1, Arc a2)
     return a1.from < a2.from;
 }
 
-clock_t APSPAlgorithms::countTime(void (*func)())
-{
-    clock_t startTime = clock();
-    (*func)();
-    clock_t endTime = clock();
-    return endTime - startTime;
-}
-
 void APSPAlgorithms::initial(int n, vector<Arc> inputArcs)
 {
     arcs = inputArcs;
@@ -84,11 +76,10 @@ void APSPAlgorithms::GraphicalFloydWarshall()
     for (int mid = 1; mid < nodeNum + 1; mid++)
         for (auto startArcEntry: toList[mid])
             for (auto endArcEntry: fromList[mid]) {
-                relaxNum++;
-
                 startArc = startArcEntry.second;
                 endArc = endArcEntry.second;
 
+                relaxNum++;
                 int temp = startArc.arcLength + endArc.arcLength;
                 if (dis[startArc.from][endArc.to] > temp) {
                     fromList[startArc.from][endArc.to] = Arc(startArc.from, endArc.to, temp);
