@@ -39,6 +39,9 @@ gen: input/spflower.out
 input/spflower.out:
 	gcc-4.8 -o $@ input/spflower.c
 
+run_all:
+	./input/run_all_case.sh bin input/test_case
+
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
