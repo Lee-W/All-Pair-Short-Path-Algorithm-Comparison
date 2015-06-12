@@ -1,3 +1,4 @@
+#include <fstream>
 #include <stdio.h>
 #include "SpFileReader.h"
 #include "APSPAlgorithms.h"
@@ -12,23 +13,26 @@ void averageTime();
 void averageRelaxNum();
 void printSummary(int numLen = 10);
 void printUsage();
+void exportToCSV(string fileName = "Report.csv");
 void checkCorrectness(int nodeNum, vector<Arc> arcs);
 
 int nodeNum;
 vector<Arc> arcs;
 int dialTime, dijkstraTime, PAPETime, SPFATime, GFWTime, AFWTime;
-int dialRelaxNum, dijkstraRelaxNum, PAPERelaxNum, SPFARelaxNum, GFWRelaxNum,
-    AFWRelaxNum;
+int dialRelaxNum, dijkstraRelaxNum, PAPERelaxNum, SPFARelaxNum,
+    GFWRelaxNum, AFWRelaxNum;
 
 int iterationNum;
 
+string titleOutputSeq[6] = {"Dial", "Dijkstra", "SPFA", "PAPE", "GFW", "AFW"};
+
 int main(int argc, const char *argv[])
 {
-    if (argc > 1) {
+    if (argc > 2) {
         readSPFile(argv[1]);
 
-        if (argc == 3)
-            setIterationNum(stoi(argv[2]));
+        if (argc == 4)
+            setIterationNum(stoi(argv[3]));
         else
             setIterationNum(1);
 
@@ -39,6 +43,9 @@ int main(int argc, const char *argv[])
         averageRelaxNum();
 
         printSummary();
+
+        printf("Export to %s", argv[2]);
+        exportToCSV(argv[2]);
 
         return 0;
     }
@@ -99,11 +106,11 @@ void runSPAlgorithms()
         PAPERelaxNum += ss.getRelaxNum();
     }
 
-    ap.AlgebraicalFloydWarshall();
+    ap.GraphicalFloydWarshall();
     GFWTime += ap.getProcessTime();
     GFWRelaxNum += ap.getRelaxNum();
 
-    ap.GraphicalFloydWarshall();
+    ap.AlgebraicalFloydWarshall();
     AFWTime += ap.getProcessTime();
     AFWRelaxNum += ap.getRelaxNum();
 }
@@ -148,10 +155,39 @@ void printSummary(int numLen)
            SPFARelaxNum, PAPERelaxNum, GFWRelaxNum, AFWRelaxNum);
 }
 
+void exportToCSV(string fileName)
+{
+   ofstream outputFileStream(fileName);
+   if (outputFileStream.is_open()) {
+       outputFileStream << "" << ",";
+       for (auto title : titleOutputSeq)
+           outputFileStream << title << ",";
+       outputFileStream << "\n";
+
+       outputFileStream << "Time" << ","
+                        << dialTime << ","
+                        << dijkstraTime << ","
+                        << SPFATime << ","
+                        << PAPETime << ","
+                        << GFWTime << ","
+                        << AFWTime << "," << "\n";
+
+       outputFileStream << "Relax Num" << ","
+                        << dialRelaxNum << ","
+                        << dijkstraRelaxNum << ","
+                        << SPFARelaxNum << ","
+                        << PAPERelaxNum << ","
+                        << GFWTime << ","
+                        << AFWRelaxNum << "," << "\n";
+   } else {
+       printf("Cannot open file %s ", fileName.c_str());
+   }
+}
+
 void printUsage()
 {
     printf("Usage:\n");
-    printf("\t./bin/SPSPComparison.out \"input sp file\" [n_it] \n");
+    printf("\t./bin/SPSPComparison.out \"input sp file\" \"output file name\" [n_it] \n");
 }
 
 void checkCorectness(int nodeNum, vector<Arc> arcs)
