@@ -48,3 +48,6 @@ clean:
 
 clean_test_case:
 	rm -rf input/spflower.out input/test_case/
+
+clean_output:
+	rm -rf output

@@ -157,7 +157,7 @@ void printSummary(int numLen)
 
 void exportToCSV(string fileName)
 {
-   ofstream outputFileStream(fileName);
+   ofstream outputFileStream(fileName, ofstream::out | ofstream::app);
    if (outputFileStream.is_open()) {
        outputFileStream << "" << ",";
        for (auto title : titleOutputSeq)
