@@ -24,7 +24,6 @@ int iterationNum;
 
 int main(int argc, const char *argv[])
 {
-    cout << argc << endl;
     if (argc > 1) {
         readSPFile(argv[1]);
 
