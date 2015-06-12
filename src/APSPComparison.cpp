@@ -1,4 +1,4 @@
-#include <iostream>
+#include <stdio.h>
 #include "SpFileReader.h"
 #include "APSPAlgorithms.h"
 #include "SSSPAlgorithms.h"
@@ -7,7 +7,7 @@ using namespace std;
 void printUsage();
 void readSPFile(string fileName);
 void runSPAlgorithms();
-void printSummary();
+void printSummary(int numLen=10);
 void checkCorrectness(int nodeNum, vector<Arc> arcs);
 
 int nodeNum;
@@ -78,31 +78,24 @@ void runSPAlgorithms()
     AFWRelaxNum = ap.getRelaxNum();
 }
 
-void printSummary()
+void printSummary(int numLen)
 {
-    cout << "\t\t"
-         << "Dial" << "\t"
-         << "dij" << "\t"
-         << "SPFA" << "\t"
-         << "PAPE" << "\t"
-         << "FWG" << "\t"
-         << "FWA" << endl;
+    string titleFormatStr = "%12s";
+    string valueFormatStr ="%-12s";
 
-    cout << "Time: " << "\t\t"
-         << dialTime << "\t"
-         << dijkstraTime << "\t"
-         << SPFATime << "\t"
-         << PAPETime << "\t"
-         << GFWTime << "\t"
-         << AFWTime << endl;
+    for (int i = 0; i < 6; i++) {
+        titleFormatStr += "%"+to_string(numLen)+"s";
+        valueFormatStr += "%"+to_string(numLen)+"d";
+    }
+    titleFormatStr += "\n";
+    valueFormatStr += "\n";
 
-    cout << "Relax Num: " << "\t"
-         << dialRelaxNum << "\t"
-         << dijkstraRelaxNum << "\t"
-         << SPFARelaxNum << "\t"
-         << PAPERelaxNum << "\t"
-         << GFWRelaxNum << "\t"
-         << AFWRelaxNum << endl;
+    printf(titleFormatStr.c_str(),
+            "", "Dial", "Dijkstra", "SPFA", "PAPE", "GFW", "AFW");
+    printf(valueFormatStr.c_str(),
+            "Time:", dialTime, dialTime, SPFATime, PAPETime, GFWTime, AFWTime);
+    printf(valueFormatStr.c_str(),
+            "Relax Num:", dialRelaxNum, dialRelaxNum, SPFARelaxNum, PAPERelaxNum, GFWRelaxNum, AFWRelaxNum);
 }
 
 void checkCorectness(int nodeNum, vector<Arc> arcs)
