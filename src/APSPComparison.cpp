@@ -5,7 +5,7 @@
 using namespace std;
 
 void readSPFile(string fileName);
-void setIterationNum(int nIt = 1);
+void setIterationNum(int nIt);
 void init();
 void runSPAlgorithms();
 void averageTime();
@@ -24,11 +24,14 @@ int iterationNum;
 
 int main(int argc, const char *argv[])
 {
+    cout << argc << endl;
     if (argc > 1) {
         readSPFile(argv[1]);
 
         if (argc == 3)
             setIterationNum(stoi(argv[2]));
+        else
+            setIterationNum(1);
 
         init();
         for (int i = 0; i < iterationNum; i++)
