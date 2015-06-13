@@ -149,7 +149,7 @@ void printSummary(int numLen)
 
     printf(titleFormatStr.c_str(), "", "Dial", "Dijkstra", "SPFA", "PAPE",
            "GFW", "AFW");
-    printf(valueFormatStr.c_str(), "Time:", dialTime, dialTime, SPFATime,
+    printf(valueFormatStr.c_str(), "Time:", dialTime, dijkstraTime, SPFATime,
            PAPETime, GFWTime, AFWTime);
     printf(valueFormatStr.c_str(), "Relax Num:", dialRelaxNum, dialRelaxNum,
            SPFARelaxNum, PAPERelaxNum, GFWRelaxNum, AFWRelaxNum);
@@ -177,7 +177,7 @@ void exportToCSV(string fileName)
                         << dijkstraRelaxNum << ","
                         << SPFARelaxNum << ","
                         << PAPERelaxNum << ","
-                        << GFWTime << ","
+                        << GFWRelaxNum << ","
                         << AFWRelaxNum << "," << "\n";
    } else {
        printf("Cannot open file %s ", fileName.c_str());
