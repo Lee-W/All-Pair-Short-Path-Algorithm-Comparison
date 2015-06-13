@@ -1,5 +1,5 @@
-# All Pair Short Path Algorithm Comparsion
-Compare the performance of shortest path lgorithms below.
+# All Pair Short Path Algorithm Comparison
+Compare the performance of shortest path algorithms below.
 - SPFA
 - Dijstra with priority queue
 - Dijstra Dial implementation
