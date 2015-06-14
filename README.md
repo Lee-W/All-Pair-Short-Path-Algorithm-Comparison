@@ -15,10 +15,11 @@ make
 
 ### run
 ```
-./bin/SPSPComparison.out "sp file" [iteration number]
+./bin/SPSPComparison.out "sp file" "output file name" [iteration number]
 ```
 
 - sp file: Path of input sp file
+- output file name: Output csv name
 - iteration number: Iteration to run these algorithm. The result will be averaged.
 
 ### generate test case
